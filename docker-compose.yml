@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile : Dockerfile-dev
     tty : true
+    environment:
+      - BASE_URL=http://localhost:81
     volumes:
       - ./docker-dev-volumes:/vars
       - ./docker-dev-volumes/php:/usr/local/etc/php

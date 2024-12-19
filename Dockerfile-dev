@@ -9,6 +9,9 @@ RUN sed -i s/deb.debian.org/archive.debian.org/g /etc/apt/sources.list \
 # Update sistem
 RUN apt-get update
 
+RUN a2enmod headers
+
+
 # Install Postgre PDO
 RUN apt-get install -y --no-install-recommends libpq-dev \
     && docker-php-ext-configure pgsql --with-pgsql=/usr/local/pgsql \
@@ -29,6 +32,8 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Ensure Apache is using the proper configuration
+RUN service apache2 restart
 # Ganti pengguna ke www-data
 USER www-data:www-data
 
