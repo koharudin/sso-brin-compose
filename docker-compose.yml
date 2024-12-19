@@ -1,0 +1,14 @@
+services:
+  sso:
+    build:
+      context: .
+      dockerfile : Dockerfile-dev
+    tty : true
+    volumes:
+      - ./docker-dev-volumes:/vars
+      - ./docker-dev-volumes/php:/usr/local/etc/php
+      - ./docker-dev-volumes/apache2:/etc/apache2
+      - ./sso:/var/www
+      - ./sso/public:/var/www/html
+    ports:
+      - 81:80
