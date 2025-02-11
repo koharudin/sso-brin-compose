@@ -57,3 +57,14 @@ services:
     depends_on:
       - db
     command: ["start-dev"]
+  keycloak_client_laravel:
+    build:
+      context: .
+      dockerfile: Dockerfile-keycloak_client_laravel
+    ports:
+      - 82:80
+    volumes:
+      - ./keycloak_client_laravel:/var/www
+      - ./keycloak_client_laravel/public:/var/www/html
+      - /var/www/storage
+      - /var/www/bootstrap/cache
