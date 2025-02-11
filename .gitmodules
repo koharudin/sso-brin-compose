@@ -1,6 +1,8 @@
 [submodule "sso"]
 	path = sso
 	url = https://github.com/koharudin/sso-brin.git
+	branch = devbrin
 [submodule "keycloak-src"]
 	path = keycloak-src
 	url = https://github.com/keycloak/keycloak.git
+	branch = main
