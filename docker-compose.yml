@@ -50,16 +50,40 @@ services:
       - KC_DB_URL=jdbc:postgresql://db:5432/db_keycloak
       - KC_DB_USERNAME=postgres
       - KC_DB_PASSWORD=postgres
-      - KC_HOSTNAME=localhost
+      - KC_HOSTNAME=host.docker.internal
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - TZ=Asia/Jakarta
-      
+      - KC_PROXY=edge  # Wajib untuk reverse proxy
     ports:
       - "8080:8080"  # Port Host:Port Container
     depends_on:
       - db
     command: start-dev --http-enabled=true --hostname-strict=false --hostname host.docker.internal
+  keycloak-https:
+    tty: true
+    build: 
+      context: keycloak-image-https
+      dockerfile: Dockerfile
+    environment:
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://db:5432/db_keycloak_https
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=postgres
+      - KC_HOSTNAME=host.docker.internal
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_LOG_LEVEL=DEBUG
+      - TZ=Asia/Jakarta
+      - KC_HTTPS_CERTIFICATE_FILE=/opt/localhost/certs/cert.pem
+      - KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/localhost/certs/key.pem
+    volumes:
+      - ./certs:/opt/localhost/certs
+    ports:
+      - "8443:8443"  # Port Host:Port Container
+    depends_on:
+      - db
+    command: start --https-certificate-file=/opt/localhost/certs/cert.pem --https-certificate-key-file=/opt/localhost/certs/key.pem
   keycloak_client_laravel:
     build:
       context: .
@@ -79,3 +103,15 @@ services:
       - 83:80
     volumes:
       - ./keycloak_client_php:/var/www/html
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx-reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs/cert.pem:/etc/nginx/cert.pem:ro
+      - ./certs/key.pem:/etc/nginx/key.pem:ro
+    ports:
+      - "443:443"
+    depends_on:
+      - keycloak
+    restart: always
