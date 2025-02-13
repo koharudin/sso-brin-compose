@@ -115,3 +115,23 @@ services:
     depends_on:
       - keycloak
     restart: always
+  openldap:
+    image: osixia/openldap:latest
+    container_name: openldap
+    environment:
+      LDAP_ORGANISATION: "My Organization"
+      LDAP_DOMAIN: "example.com"
+      LDAP_ADMIN_PASSWORD: "admin"
+    ports:
+      - "389:389"   # Port LDAP
+      - "636:636"   # Port LDAPS (SSL)
+    restart: always
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: host.docker.internal
+      PHPLDAPADMIN_HTTPS: "false"  # Non-SSL mode
+    ports:
+      - "8081:80"
+    restart: always
