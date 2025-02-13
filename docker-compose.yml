@@ -23,6 +23,7 @@ services:
       - POSTGRES_DB=db
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
+      - TZ=Asia/Jakarta
     volumes:
       - ./docker-dev-volumes/pg_data:/var/lib/postgresql/data  # Persist PostgreSQL data
   sso:
@@ -52,11 +53,13 @@ services:
       - KC_HOSTNAME=localhost
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
+      - TZ=Asia/Jakarta
+      
     ports:
       - "8080:8080"  # Port Host:Port Container
     depends_on:
       - db
-    command: ["start-dev"]
+    command: start-dev --http-enabled=true --hostname-strict=false --hostname host.docker.internal
   keycloak_client_laravel:
     build:
       context: .
@@ -68,3 +71,11 @@ services:
       - ./keycloak_client_laravel/public:/var/www/html
       - /var/www/storage
       - /var/www/bootstrap/cache
+  keycloak_client_php:
+    build:
+      context: .
+      dockerfile: Dockerfile-keycloak_client_php
+    ports:
+      - 83:80
+    volumes:
+      - ./keycloak_client_php:/var/www/html

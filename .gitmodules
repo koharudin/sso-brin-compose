@@ -10,3 +10,7 @@
 	path = keycloak_client_laravel
 	url = https://github.com/koharudin/keycloak_client_laravel.git
 	branch = main
+[submodule "keycloak_client_php"]
+	path = keycloak_client_php
+	url = https://github.com/koharudin/keycloak_client_php.git
+	branch = main
