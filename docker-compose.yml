@@ -41,6 +41,16 @@ services:
       - ./sso/public:/var/www/html
     ports:
       - 81:80
+  keycloak-src:
+    tty: true
+    image: openjdk:21-slim
+    ports:
+      - 90:8080
+      - 93:8443
+    volumes:
+      - ./keycloak-src:/opt/keycloak-src
+      - ./keycloak-dist:/opt/keycloak-dist
+      - ./certs:/opt/localhost/certs
   keycloak:
     build: 
       context: keycloak-image
@@ -75,15 +85,10 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_LOG_LEVEL=DEBUG
       - TZ=Asia/Jakarta
-      - KC_HTTPS_CERTIFICATE_FILE=/opt/localhost/certs/cert.pem
-      - KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/localhost/certs/key.pem
-    volumes:
-      - ./certs:/opt/localhost/certs
     ports:
       - "8443:8443"  # Port Host:Port Container
     depends_on:
       - db
-    command: start --https-certificate-file=/opt/localhost/certs/cert.pem --https-certificate-key-file=/opt/localhost/certs/key.pem
   keycloak_client_laravel:
     build:
       context: .
