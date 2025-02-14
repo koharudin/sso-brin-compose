@@ -14,3 +14,11 @@
 	path = keycloak_client_php
 	url = https://github.com/koharudin/keycloak_client_php.git
 	branch = main
+[submodule "keycloak-image"]
+	path = keycloak-image
+	url = https://github.com/koharudin/keycloak-image.git
+	branch = main
+[submodule "keycloak-image-https"]
+	path = keycloak-image-https
+	url = https://github.com/koharudin/keycloak-image-https.git
+	branch = main
