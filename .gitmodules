@@ -22,3 +22,7 @@
 	path = keycloak-image-https
 	url = https://github.com/koharudin/keycloak-image-https.git
 	branch = main
+[submodule "keycloak_client_next"]
+	path = keycloak_client_next
+	url = https://github.com/koharudin/keycloak_client_next.git
+	branch = main

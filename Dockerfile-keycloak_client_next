@@ -1,0 +1,4 @@
+# Gunakan image resmi PHP dengan Apache
+FROM node:alpine
+WORKDIR /app
+

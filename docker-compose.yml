@@ -108,6 +108,16 @@ services:
       - 83:80
     volumes:
       - ./keycloak_client_php:/var/www/html
+  keycloak_client_next:
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile-keycloak_client_next
+    ports:
+      - 84:3000
+    volumes:
+      - ./keycloak_client_next:/app
+    command: "npm run dev  --experimental-https"
   nginx:
     image: nginx:latest
     container_name: nginx
