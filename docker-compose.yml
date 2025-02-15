@@ -48,7 +48,7 @@ services:
       - 90:8080
       - 93:8443
     volumes:
-      - ./keycloak-src:/opt/keycloak-src
+      - ./keycloak-src:/opt/keycloak-src  
       - ./keycloak-dist:/opt/keycloak-dist
       - ./certs:/opt/localhost/certs
   keycloak:

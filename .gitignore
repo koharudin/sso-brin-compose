@@ -1,3 +1,4 @@
 docker-dev-volumes/
 docker-compose.yml
 keycloak-dist/data/tmp/
+keycloak-src/.pnpm-store/
