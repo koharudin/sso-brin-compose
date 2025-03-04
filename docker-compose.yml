@@ -55,6 +55,8 @@ services:
     build: 
       context: keycloak-image
       dockerfile: Dockerfile
+    deploy:
+      replicas: 1  # Number of replicas
     environment:
       - KC_DB=postgres
       - KC_DB_URL=jdbc:postgresql://db:5432/db_keycloak
@@ -65,11 +67,13 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - TZ=Asia/Jakarta
       - KC_PROXY=edge  # Wajib untuk reverse proxy
+      - PROXY_ADDRESS_FORWARDING=true
     ports:
-      - "8080:8080"  # Port Host:Port Container
+      - "8080:8080"
     depends_on:
       - db
-    command: start-dev --http-enabled=true --hostname-strict=false --hostname host.docker.internal
+    command: start --http-enabled=true --hostname-strict=false --hostname host.docker.internal
+    #command: start-dev --proxy-headers forwarded --http-enabled=true --hostname-strict=false --hostname host.docker.internal
   keycloak-https:
     tty: true
     build: 
@@ -89,6 +93,8 @@ services:
       - "8443:8443"  # Port Host:Port Container
     depends_on:
       - db
+    volumes:
+      - './keycloak-custom-theme/themes/custom-theme/theme:/opt/keycloak/themes'
   keycloak_client_laravel:
     build:
       context: .
@@ -140,13 +146,4 @@ services:
     ports:
       - "389:389"   # Port LDAP
       - "636:636"   # Port LDAPS (SSL)
-    restart: always
-  phpldapadmin:
-    image: osixia/phpldapadmin:latest
-    container_name: phpldapadmin
-    environment:
-      PHPLDAPADMIN_LDAP_HOSTS: host.docker.internal
-      PHPLDAPADMIN_HTTPS: "false"  # Non-SSL mode
-    ports:
-      - "8081:80"
     restart: always

@@ -26,3 +26,7 @@
 	path = keycloak_client_next
 	url = https://github.com/koharudin/keycloak_client_next.git
 	branch = main
+[submodule "keycloak-custom-theme"]
+	path = keycloak-custom-theme
+	url = https://github.com/tharinduRE/keycloak-custom-theme.git
+	branch = master
